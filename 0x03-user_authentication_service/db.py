@@ -44,9 +44,25 @@ class DB:
         """Returns first row of users table filtered by
         input arguments"""
         try:
-            result = self._session.query(User).filter_by(**kwargs).first()
+            record = self._session.query(User).filter_by(**kwargs).first()
         except TypeError:
             raise InvalidRequestError
-        if result is None:
+        if record is None:
             raise NoResultFound
-        return result
+        return record
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Updates user's attributes"""
+        user_record = self.find_user_by(id=user_id)
+
+        if not user_record:
+            raise ValueError(f"No user found with id: {user_id}")
+
+        for key, value in kwargs.items():
+            if hasattr(user_record, key):
+                setattr(user_record, key, value)
+            else:
+                raise ValueError(f"Invalid attribute: {key}")
+
+        self._session.commit()
+        return None
