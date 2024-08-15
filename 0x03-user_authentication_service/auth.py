@@ -12,9 +12,11 @@ def _hash_password(password: str) -> str:
     """Returns salted hashed password as bytestring"""
     return hashpw(password.encode("utf-8"), gensalt())
 
+
 def _generate_uuid() -> str:
     """Returns string representation of a new UUID"""
     return str(uuid4())
+
 
 class Auth:
     """Auth class to interact with the authentication database.
