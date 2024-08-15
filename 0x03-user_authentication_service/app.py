@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, redirect
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -60,6 +60,37 @@ def login() -> str:
     })
     response.set_cookie("session_id", session_id)
     return response
+
+
+@app.route("/sessions", methods=["DELETE"])
+def logout():
+    """ DELETE /sessions
+    Destroys session by finding session_id (key in cookie)
+    Return:
+      - Redirects user to status route (GET /)
+    """
+    user_cookie = request.cookies.get("session_id", None)
+    user = AUTH.get_user_from_session_id(user_cookie)
+    if user_cookie is None or user is None:
+        abort(403)
+    AUTH.destroy_session(user.id)
+    return redirect('/')
+
+
+@app.route('/profile', methods=['GET'])
+def profile() -> str:
+    """ GET /profile
+    Return:
+        - Use session_id to find the user.
+        - 403 if session ID is invalid
+    """
+    user_cookie = request.cookies.get("session_id", None)
+    if user_cookie is None:
+        abort(403)
+    user = AUTH.get_user_from_session_id(user_cookie)
+    if user is None:
+        abort(403)
+    return jsonify({"email": user.email}), 200
 
 
 if __name__ == "__main__":
