@@ -6,6 +6,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base, User
 
@@ -37,3 +39,15 @@ class DB:
         self._session.add(newUser)
         self._session.commit()
         return newUser
+
+    def find_user_by(self, **kwargs) -> User:
+        """Returns first row of users table filtered by
+        input arguments"""
+        try:
+            searchResult = self._session.query(User).filter_by(**kwargs).first()
+        except TypeError:
+            raise InvalidRequestError
+        if searchResult is None:
+            raise NoResultFound
+        return searchResult
+
