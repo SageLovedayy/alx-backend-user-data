@@ -44,7 +44,8 @@ class DB:
         """Returns first row of users table filtered by input arguments"""
         try:
             record = self._session.query(User).filter_by(**kwargs).first()
-
+        except TypeError:
+            raise InvalidRequestError
         if record is None:
             raise NoResultFound(f"No user found with criteria: {kwargs}")
         return record
