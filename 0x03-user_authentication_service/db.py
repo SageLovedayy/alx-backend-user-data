@@ -46,11 +46,8 @@ class DB:
             record = self._session.query(User).filter_by(**kwargs).first()
 
         if record is None:
-                raise NoResultFound(f"No user found with criteria: {kwargs}")
-
+            raise NoResultFound(f"No user found with criteria: {kwargs}")
         return record
-
-
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """Updates user's attributes"""
