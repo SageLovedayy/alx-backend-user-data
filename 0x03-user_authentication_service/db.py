@@ -41,15 +41,25 @@ class DB:
         return newUser
 
     def find_user_by(self, **kwargs) -> User:
-        """Returns first row of users table filtered by
-        input arguments"""
+        """Returns first row of users table filtered by input arguments"""
         try:
+            if not kwargs:
+                raise ValueError("No filter criteria provided.")
+
             record = self._session.query(User).filter_by(**kwargs).first()
-        except TypeError:
-            raise InvalidRequestError
-        if record is None:
-            raise NoResultFound
-        return record
+
+            if record is None:
+                raise NoResultFound(f"No user found with criteria: {kwargs}")
+
+            return record
+
+        except TypeError as e:
+            raise InvalidRequestError(f"Invalid filter criteria: {e}")
+        except ValueError as e:
+            raise ValueError(f"Value error: {e}")
+        except Exception as e:
+            raise Exception(f"An unexpected error occurred: {e}")
+
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """Updates user's attributes"""
