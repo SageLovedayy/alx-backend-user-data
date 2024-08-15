@@ -44,10 +44,9 @@ class DB:
         """Returns first row of users table filtered by
         input arguments"""
         try:
-            searchResult = self._session.query(User).filter_by(**kwargs).first()
+            result = self._session.query(User).filter_by(**kwargs).first()
         except TypeError:
             raise InvalidRequestError
-        if searchResult is None:
+        if result is None:
             raise NoResultFound
-        return searchResult
-
+        return result
