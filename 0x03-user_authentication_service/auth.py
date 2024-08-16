@@ -101,7 +101,7 @@ class Auth:
 
         user = self._db.find_user_by(reset_token=reset_token)
         if user is None:
-            raise ValueError("Invalid reset token")
+            raise ValueError
 
         self._db.update_user(
             user.id,

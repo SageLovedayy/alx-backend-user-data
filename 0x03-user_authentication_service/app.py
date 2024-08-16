@@ -115,7 +115,8 @@ def get_reset_password_token() -> str:
 
 @app.route('/reset_password', methods=['PUT'])
 def update_password() -> str:
-    """Update user password using a reset token.
+    """ PUT /reset_password
+    Update user password using a reset token.
     Return:
         - JSON response with email and success message
         - 403 if the token is invalid
