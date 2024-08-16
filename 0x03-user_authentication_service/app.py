@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""App module for flask app, containing all auth routes
+with no direct interaction with db
+"""
 
 from flask import Flask, jsonify, request, abort, redirect
 from auth import Auth

@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""Auth Module- handles authentication, interacting with
+database
+"""
 
 from bcrypt import hashpw, gensalt, checkpw
 from db import DB
