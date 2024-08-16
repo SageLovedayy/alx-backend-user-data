@@ -98,12 +98,12 @@ class Auth:
         Raises ValueError if the reset token is invalid or user does not exist.
         """
         if not reset_token or not password:
-            raise ValueError("Reset token and password must be provided")
+            raise ValueError
 
         try:
             user = self._db.find_user_by(reset_token=reset_token)
         except NoResultFound:
-            raise ValueError("Invalid reset token")
+            raise ValueError
 
         hashed_password = _hash_password(password)
         self._db.update_user(
